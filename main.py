@@ -30,19 +30,10 @@ class GameConfig:
     CELL_SIZE = SCREEN_WIDTH // BOARD_SIZE_X
 
 class Board:
-    def __init__(self, config):
+    def __init__(self, config, font):
         self.config = config
-        self.special_tiles = {
-            5: {"color": config.GREEN, "effect": 3},
-            10: {"color": config.RED, "effect": -2},
-            18: {"color": config.GREEN, "effect": 3},
-            24: {"color": config.RED, "effect": -2},
-            30: {"color": config.GREEN, "effect": 3},
-            40: {"color": config.RED, "effect": -2},
-            50: {"color": config.RED, "effect": -2},
-            60: {"color": config.RED, "effect": -2},
-        }
-        self.bomb_position = (config.BOARD_SIZE_X * config.BOARD_SIZE_Y) // 2
+        self.font = font
+        # reszta kodu pozostaje bez zmian
 
     def draw(self, screen):
         for row in range(self.config.BOARD_SIZE_Y):
@@ -59,9 +50,10 @@ class Board:
                 pygame.draw.rect(screen, color, (x, y, self.config.CELL_SIZE, self.config.CELL_SIZE))
                 pygame.draw.rect(screen, self.config.BLACK, (x, y, self.config.CELL_SIZE, self.config.CELL_SIZE), 2)
 
-                text = self.config.FONT.render(str(tile_number), True, self.config.BLACK)
+                text = self.font.render(str(tile_number), True, self.config.BLACK)
                 text_rect = text.get_rect(center=(x + self.config.CELL_SIZE // 2, y + self.config.CELL_SIZE // 2))
                 screen.blit(text, text_rect)
+
 
 
 class Player:
