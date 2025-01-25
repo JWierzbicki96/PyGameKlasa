@@ -28,7 +28,6 @@ class GameConfig:
     BOARD_SIZE_X = 12
     BOARD_SIZE_Y = 6
     CELL_SIZE = SCREEN_WIDTH // BOARD_SIZE_X
-    FONT = pygame.font.Font(None, FONT_SIZE)
 
 class Board:
     def __init__(self, config):
@@ -143,3 +142,7 @@ class Game:
             color = self.config.BLACK
         render = self.config.FONT.render(text, True, color)
         self.screen.blit(render, (x, y))
+
+if __name__ == "__main__":
+    game = Game()
+    game.run()
