@@ -31,44 +31,40 @@ class GameConfig:
     FONT = pygame.font.Font(None, FONT_SIZE)
 
 
-# Pola specjalne :Zielone pole: +3, Czerwone pole: -2
+class Board:
+    def __init__(self, config):
+        self.config = config
+        self.special_tiles = {
+            5: {"color": config.GREEN, "effect": 3},
+            10: {"color": config.RED, "effect": -2},
+            18: {"color": config.GREEN, "effect": 3},
+            24: {"color": config.RED, "effect": -2},
+            30: {"color": config.GREEN, "effect": 3},
+            40: {"color": config.RED, "effect": -2},
+            50: {"color": config.RED, "effect": -2},
+            60: {"color": config.RED, "effect": -2},
+        }
+        self.bomb_position = (config.BOARD_SIZE_X * config.BOARD_SIZE_Y) // 2
 
-special_tiles = {
-    5: {"color": GREEN, "effect": 3},
-    10: {"color": RED, "effect": -2},
-    18: {"color": GREEN, "effect": 3},
-    24: {"color": RED, "effect": -2},
-    30: {"color": GREEN, "effect": 3},
-    40: {"color": RED, "effect": -2},
-    50: {"color": RED, "effect": -2},
-    60: {"color": RED, "effect": -2},
-}
+    def draw(self, screen):
+        for row in range(self.config.BOARD_SIZE_Y):
+            for col in range(self.config.BOARD_SIZE_X):
+                tile_number = row * self.config.BOARD_SIZE_X + col + 1
+                x, y = col * self.config.CELL_SIZE, row * self.config.CELL_SIZE + 150
+                color = self.config.WHITE
 
-# Bomba na środku planszy
-bomb_position = (board_size_x * board_size_y) // 2  # Środkowe pole planszy
+                if tile_number in self.special_tiles:
+                    color = self.special_tiles[tile_number]["color"]
+                if tile_number == self.bomb_position:
+                    color = (255, 0, 255)
 
+                pygame.draw.rect(screen, color, (x, y, self.config.CELL_SIZE, self.config.CELL_SIZE))
+                pygame.draw.rect(screen, self.config.BLACK, (x, y, self.config.CELL_SIZE, self.config.CELL_SIZE), 2)
 
-# Funkcja rysująca planszę
-def draw_board():
-    for row in range(board_size_y):
-        for col in range(board_size_x):
-            tile_number = row * board_size_x + col + 1
-            x, y = col * cell_size, row * cell_size + 150  # Przesunięcie wierszy o 150, żeby napisy nie nachodziły na planszę
+                text = self.config.FONT.render(str(tile_number), True, self.config.BLACK)
+                text_rect = text.get_rect(center=(x + self.config.CELL_SIZE // 2, y + self.config.CELL_SIZE // 2))
+                screen.blit(text, text_rect)
 
-            # Kolor specjalnych pól
-            color = WHITE
-            if tile_number in special_tiles:
-                color = special_tiles[tile_number]["color"]
-            if tile_number == bomb_position:
-                color = (255, 0, 255)  # Fioletowe pole dla bomby
-
-            pygame.draw.rect(screen, color, (x, y, cell_size, cell_size))
-            pygame.draw.rect(screen, BLACK, (x, y, cell_size, cell_size), 2)
-
-            # Numer pola
-            text = font.render(str(tile_number), True, BLACK)
-            text_rect = text.get_rect(center=(x + cell_size // 2, y + cell_size // 2))
-            screen.blit(text, text_rect)
 
 
 # Funkcja rysująca pionek gracza
