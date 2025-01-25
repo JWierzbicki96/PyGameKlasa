@@ -15,33 +15,21 @@ Other notes, own observations: [brak]
 import pygame
 import random
 
-# Inicjalizacja Pygame
-pygame.init()
+class GameConfig:
+    SCREEN_WIDTH = 800
+    SCREEN_HEIGHT = 600
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    BLUE = (100, 149, 237)
+    GREEN = (34, 139, 34)
+    RED = (255, 69, 0)
+    YELLOW = (255, 223, 0)
+    FONT_SIZE = 36
+    BOARD_SIZE_X = 12
+    BOARD_SIZE_Y = 6
+    CELL_SIZE = SCREEN_WIDTH // BOARD_SIZE_X
+    FONT = pygame.font.Font(None, FONT_SIZE)
 
-# Ustawienia ekranu
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Gra Planszowa")
-
-# Kolory
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-BLUE = (100, 149, 237)
-GREEN = (34, 139, 34)
-RED = (255, 69, 0)
-YELLOW = (255, 223, 0)
-
-# Czcionka
-font = pygame.font.Font(None, 36)
-
-# Zmienne gry
-board_size_x = 12  # 12 kolumn
-board_size_y = 6  # 6 wierszy
-cell_size = SCREEN_WIDTH // board_size_x
-player_position = 1
-game_over = False
-dice_roll = None
-roll_count = 0  # Licznik rzutów kostką
 
 # Pola specjalne :Zielone pole: +3, Czerwone pole: -2
 
