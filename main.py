@@ -30,7 +30,6 @@ class GameConfig:
     CELL_SIZE = SCREEN_WIDTH // BOARD_SIZE_X
     FONT = pygame.font.Font(None, FONT_SIZE)
 
-
 class Board:
     def __init__(self, config):
         self.config = config
@@ -66,14 +65,28 @@ class Board:
                 screen.blit(text, text_rect)
 
 
+class Player:
+    def __init__(self, config):
+        self.config = config
+        self.position = 1
 
-# Funkcja rysująca pionek gracza
-def draw_player(position):
-    row = (position - 1) // board_size_x
-    col = (position - 1) % board_size_x
+    def move(self, steps, board):
+        self.position += steps
 
-    x, y = col * cell_size, row * cell_size + 150  # Przesunięcie pionka, aby był w odpowiednim miejscu na planszy
-    pygame.draw.circle(screen, BLUE, (x + cell_size // 2, y + cell_size // 2), cell_size // 4)
+        if self.position in board.special_tiles:
+            effect = board.special_tiles[self.position]["effect"]
+            self.position = max(1, self.position + effect)
+
+        if self.position == board.bomb_position:
+            self.position = 1
+
+    def draw(self, screen):
+        row = (self.position - 1) // self.config.BOARD_SIZE_X
+        col = (self.position - 1) % self.config.BOARD_SIZE_X
+
+        x, y = col * self.config.CELL_SIZE, row * self.config.CELL_SIZE + 150
+        pygame.draw.circle(screen, self.config.BLUE, (x + self.config.CELL_SIZE // 2, y + self.config.CELL_SIZE // 2), self.config.CELL_SIZE // 4)
+
 
 
 # Funkcja rysująca kostkę
