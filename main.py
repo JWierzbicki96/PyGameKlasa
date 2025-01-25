@@ -33,7 +33,12 @@ class Board:
     def __init__(self, config, font):
         self.config = config
         self.font = font
-        # reszta kodu pozostaje bez zmian
+        self.special_tiles = {
+            5: {"color": self.config.GREEN, "effect": -2},  # Przykład specjalnego pola
+            10: {"color": self.config.RED, "effect": 3},
+            15: {"color": self.config.YELLOW, "effect": -5}
+        }
+        self.bomb_position = 20  # Przykładowa pozycja bomby
 
     def draw(self, screen):
         for row in range(self.config.BOARD_SIZE_Y):
@@ -53,6 +58,7 @@ class Board:
                 text = self.font.render(str(tile_number), True, self.config.BLACK)
                 text_rect = text.get_rect(center=(x + self.config.CELL_SIZE // 2, y + self.config.CELL_SIZE // 2))
                 screen.blit(text, text_rect)
+
 
 class Player:
     def __init__(self, config, font):
@@ -130,14 +136,14 @@ class Game:
     def draw_dice(self):
         pygame.draw.rect(self.screen, self.config.WHITE, (650, 50, 80, 80), border_radius=10)
         pygame.draw.rect(self.screen, self.config.BLACK, (650, 50, 80, 80), 3, border_radius=10)
-        text = self.config.FONT.render(str(self.dice_roll), True, self.config.BLACK)
+        text = self.font.render(str(self.dice_roll), True, self.config.BLACK)  # Używamy self.font
         text_rect = text.get_rect(center=(690, 90))
         self.screen.blit(text, text_rect)
 
     def draw_text(self, text, x, y, color=None):
         if color is None:
             color = self.config.BLACK
-        render = self.config.FONT.render(text, True, color)
+        render = self.font.render(text, True, color)  # Używamy self.font
         self.screen.blit(render, (x, y))
 
 if __name__ == "__main__":
