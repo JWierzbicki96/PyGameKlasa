@@ -54,11 +54,10 @@ class Board:
                 text_rect = text.get_rect(center=(x + self.config.CELL_SIZE // 2, y + self.config.CELL_SIZE // 2))
                 screen.blit(text, text_rect)
 
-
-
 class Player:
-    def __init__(self, config):
+    def __init__(self, config, font):
         self.config = config
+        self.font = font
         self.position = 1
 
     def move(self, steps, board):
