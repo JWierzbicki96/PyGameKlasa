@@ -86,12 +86,17 @@ class Player:
         x, y = col * self.config.CELL_SIZE, row * self.config.CELL_SIZE + 150
         pygame.draw.circle(screen, self.config.BLUE, (x + self.config.CELL_SIZE // 2, y + self.config.CELL_SIZE // 2), self.config.CELL_SIZE // 4)
 
+
 class Game:
     def __init__(self):
         pygame.init()
         self.config = GameConfig()
         self.screen = pygame.display.set_mode((self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT))
         pygame.display.set_caption("Gra Planszowa")
+
+        # Initialize the font here
+        self.font = pygame.font.Font(None, self.config.FONT_SIZE)
+
         self.board = Board(self.config)
         self.player = Player(self.config)
         self.dice_roll = None
