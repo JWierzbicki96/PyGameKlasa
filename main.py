@@ -85,14 +85,15 @@ class Game:
         self.screen = pygame.display.set_mode((self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT))
         pygame.display.set_caption("Gra Planszowa")
 
-        # Initialize the font here
         self.font = pygame.font.Font(None, self.config.FONT_SIZE)
 
-        self.board = Board(self.config)
-        self.player = Player(self.config)
+
+        self.board = Board(self.config, self.font)
+        self.player = Player(self.config, self.font)
         self.dice_roll = None
         self.roll_count = 0
         self.game_over = False
+
 
     def roll_dice(self):
         self.dice_roll = random.randint(1, 6)
@@ -142,3 +143,4 @@ class Game:
 if __name__ == "__main__":
     game = Game()
     game.run()
+
