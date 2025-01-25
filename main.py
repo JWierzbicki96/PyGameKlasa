@@ -87,77 +87,59 @@ class Player:
         x, y = col * self.config.CELL_SIZE, row * self.config.CELL_SIZE + 150
         pygame.draw.circle(screen, self.config.BLUE, (x + self.config.CELL_SIZE // 2, y + self.config.CELL_SIZE // 2), self.config.CELL_SIZE // 4)
 
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.config = GameConfig()
+        self.screen = pygame.display.set_mode((self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT))
+        pygame.display.set_caption("Gra Planszowa")
+        self.board = Board(self.config)
+        self.player = Player(self.config)
+        self.dice_roll = None
+        self.roll_count = 0
+        self.game_over = False
 
+    def roll_dice(self):
+        self.dice_roll = random.randint(1, 6)
+        self.player.move(self.dice_roll, self.board)
+        self.roll_count += 1
 
-# Funkcja rysująca kostkę
-def draw_dice(roll):
-    if roll is not None:
-        pygame.draw.rect(screen, WHITE, (650, 50, 80, 80), border_radius=10)  # Przesunięcie kostki wyżej
-        pygame.draw.rect(screen, BLACK, (650, 50, 80, 80), 3, border_radius=10)
-        text = font.render(str(roll), True, BLACK)
-        text_rect = text.get_rect(center=(690, 90))  # Zmiana pozycji tekstu w kostce
-        screen.blit(text, text_rect)
+        if self.player.position >= self.config.BOARD_SIZE_X * self.config.BOARD_SIZE_Y:
+            self.player.position = self.config.BOARD_SIZE_X * self.config.BOARD_SIZE_Y
+            self.game_over = True
 
+    def run(self):
+        running = True
+        while running:
+            self.screen.fill(self.config.WHITE)
+            self.board.draw(self.screen)
+            self.player.draw(self.screen)
 
-# Funkcja wyświetlająca tekst na ekranie
-def draw_text(text, x, y, color=BLACK):
-    render = font.render(text, True, color)
-    screen.blit(render, (x, y))
+            if self.dice_roll is not None:
+                self.draw_dice()
 
+            self.draw_text(f"Rzuty kostką: {self.roll_count}", 10, 130)
 
-# Główna pętla gry
-running = True
-while running:
-    screen.fill(WHITE)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN and not self.game_over:
+                    if event.key == pygame.K_SPACE:
+                        self.roll_dice()
 
-    # Rysowanie planszy
-    draw_board()
+            pygame.display.flip()
 
-    # Rysowanie pionka
-    draw_player(player_position)
+        pygame.quit()
 
-    # Rysowanie kostki
-    draw_dice(dice_roll)
+    def draw_dice(self):
+        pygame.draw.rect(self.screen, self.config.WHITE, (650, 50, 80, 80), border_radius=10)
+        pygame.draw.rect(self.screen, self.config.BLACK, (650, 50, 80, 80), 3, border_radius=10)
+        text = self.config.FONT.render(str(self.dice_roll), True, self.config.BLACK)
+        text_rect = text.get_rect(center=(690, 90))
+        self.screen.blit(text, text_rect)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.KEYDOWN and not game_over:
-            if event.key == pygame.K_SPACE:
-                # Rzut kostką
-                dice_roll = random.randint(1, 6)
-                player_position += dice_roll
-                roll_count += 1  # Zwiększamy licznik rzutów
-
-                # Sprawdzenie specjalnych pól
-                if player_position in special_tiles:
-                    effect = special_tiles[player_position]["effect"]
-                    player_position = max(1, player_position + effect)
-
-                # Sprawdzenie "bomby"
-                if player_position == bomb_position:
-                    player_position = 1  # Resetowanie gry, powrót na początek
-
-                # Sprawdzenie końca gry
-                if player_position >= board_size_x * board_size_y:
-                    player_position = board_size_x * board_size_y
-                    game_over = True
-
-    # Rysowanie komunikatów
-    draw_text("Gra Planszowa", 10, 10, YELLOW)
-    draw_text(f"Pozycja gracza: {player_position}", 10, 50)
-
-    if dice_roll is not None:
-        draw_text(f"Rzut kostką: {dice_roll}", 10, 90)  # Przesunięcie napisu o rzucie kostką
-
-    # Pozycja napisu o liczbie rzutów
-    draw_text(f"Rzuty kostką: {roll_count}", 10, 130)  # Przesunięcie napisu w lewo
-
-    # Napis gratulacyjny
-    if game_over:
-        draw_text("Gratulacje! Wygrałeś!", 250, 50, GREEN)
-
-    pygame.display.flip()
-
-# Zakończenie gry
-pygame.quit()
+    def draw_text(self, text, x, y, color=None):
+        if color is None:
+            color = self.config.BLACK
+        render = self.config.FONT.render(text, True, color)
+        self.screen.blit(render, (x, y))
