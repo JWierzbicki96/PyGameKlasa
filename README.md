@@ -14,7 +14,7 @@ która resetuje grę, jeśli na nią trafisz.
 - Komunikat o wygranej po dojściu do końca planszy
 
 ## Wymagania
-- Python 3.x
+- Python 3.12
 - Biblioteka Pygame (można zainstalować przez `pip install pygame`)
 
 ## Jak uruchomić grę
