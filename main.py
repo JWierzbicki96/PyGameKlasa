@@ -1,15 +1,9 @@
 """Author: [Jakub Wierzbicki]
 Date: [14.01.2025]
-Course: Python I, Lab 6/7
 Assignent: [Ćwiczenia składni w programowaniu proceduralnym z wykorzystaniem elementów graficznych Pygame]
 Description: [Gra opierjąca się na bibiotece Pygame. Gra która polega na przejściu planszy dzięki wyrzuceniu odpowiedniej
 ilości oczek na kostce. Gra posiada pola, które cofają lub powodują restart gry]
 Version: [Wersja 3.12]
-Dificulty: [średnie]
-The level of motivation to learn Python: [Bardzo wysoki]
-Expected mark: [5]
-Own ideas for modifying task, suggestions of your own: [-]
-Other notes, own observations: [brak]
 """
 
 import pygame
